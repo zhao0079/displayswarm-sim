@@ -81,8 +81,13 @@ struct TCPInterface: public Hub, public QObject
 
 	void sendPoses(Stream *stream)
 	{
-		string poses("poses 1 0 0 0\n");
-		stream->write(poses.c_str(), poses.length());
+		ostringstream oss;
+		oss << "poses ";
+		oss << epucks.size() << " ";
+		for (size_t i = 0; i < epucks.size(); ++i)
+			oss << i << " " << epucks[i]->pos.x << " " << epucks[i]->pos.y << " ";
+		oss << "\n";
+		stream->write(oss.str().c_str(), oss.str().length());
 		stream->flush();
 	}
 
